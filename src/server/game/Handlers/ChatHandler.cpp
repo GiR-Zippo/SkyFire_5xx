@@ -41,6 +41,8 @@
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 
+void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
+{
     uint32 type = 0;
     uint32 lang;
     
