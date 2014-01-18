@@ -41,8 +41,6 @@
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 
-void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
-{
     uint32 type = 0;
     uint32 lang;
     
@@ -60,20 +58,19 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
         case CMSG_MESSAGECHAT_GUILD:
             type = CHAT_MSG_GUILD;
             break;
-    /*
         case CMSG_MESSAGECHAT_CHANNEL:
             type = CHAT_MSG_CHANNEL;
             break;
-        case CMSG_MESSAGECHAT_OFFICER:
-            type = CHAT_MSG_OFFICER;
-            break;
+/*         case CMSG_MESSAGECHAT_OFFICER:
+             type = CHAT_MSG_OFFICER;
+             break;*/
         case CMSG_MESSAGECHAT_AFK:
             type = CHAT_MSG_AFK;
             break;
         case CMSG_MESSAGECHAT_DND:
             type = CHAT_MSG_DND;
             break;
-        case CMSG_MESSAGECHAT_EMOTE:
+/*        case CMSG_MESSAGECHAT_EMOTE:
             type = CHAT_MSG_EMOTE;
             break;
         case CMSG_MESSAGECHAT_PARTY:
@@ -263,7 +260,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             break;
         case CHAT_MSG_AFK:
         case CHAT_MSG_DND:
-            textLength = recvData.ReadBits(9);
+            textLength = recvData.ReadBits(8);
             msg = recvData.ReadString(textLength);
             ignoreChecks = true;
             break;
