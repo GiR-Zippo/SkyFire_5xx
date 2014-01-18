@@ -29,12 +29,15 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
     std::string channelName, password;
 
     recvPacket >> channelId;
-    uint8 unknown1 = recvPacket.ReadBit();   // unknowns
+
+    passLength = recvPacket.ReadBits(7);
+    uint8 unknown1 = recvPacket.ReadBit();
+
+    channelLength = recvPacket.ReadBits(7);
     uint8 unknown2 = recvPacket.ReadBit();
-    channelLength = recvPacket.ReadBits(8);
-    passLength = recvPacket.ReadBits(8);
-    channelName = recvPacket.ReadString(channelLength);
+
     password = recvPacket.ReadString(passLength);
+    channelName = recvPacket.ReadString(channelLength);
 
     TC_LOG_DEBUG("chat.system", "CMSG_JOIN_CHANNEL %s Channel: %u, unk1: %u, unk2: %u, channel: %s, password: %s",
         GetPlayerInfo().c_str(), channelId, unknown1, unknown2, channelName.c_str(), password.c_str());
@@ -63,14 +66,14 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
 
 void WorldSession::HandleLeaveChannel(WorldPacket& recvPacket)
 {
-    uint32 unk;
+    uint32 channelId;
     std::string channelName;
-    recvPacket >> unk;                                      // channel id?
+    recvPacket >> channelId;
     uint32 length = recvPacket.ReadBits(8);
     channelName = recvPacket.ReadString(length);
 
     TC_LOG_DEBUG("chat.system", "CMSG_LEAVE_CHANNEL %s Channel: %s, unk1: %u",
-        GetPlayerInfo().c_str(), channelName.c_str(), unk);
+        GetPlayerInfo().c_str(), channelName.c_str(), channelId);
 
     if (channelName.empty())
         return;
